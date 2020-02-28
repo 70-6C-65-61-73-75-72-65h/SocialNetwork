@@ -1,0 +1,139 @@
+<!-- <!DOCTYPE HTML>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <title>Тег IFRAME</title>
+ </head>
+ <body>  
+
+ <iframe src="banner.html" width="468" height="60" align="left">
+    Ваш браузер не поддерживает плавающие фреймы!
+ </iframe>
+
+ </body>
+</html> -->
+
+
+<style>
+iframe { /* iframe from the victim site */
+    width: 400px;
+    height: 100px;
+    position: absolute;
+    top:0; left:-20px;
+    opacity: 0.1; /* in real opacity:0 */
+    z-index: 1;
+}
+</style>
+
+<div>Click to get rich now:</div>
+
+<!-- The url from the victim site -->
+<iframe src="/clickjacking/facebook.html"></iframe>
+
+<button>Click here!</button>
+
+<div>...And you're cool (I'm a cool hacker actually)!</div>
+
+
+
+
+
+<li class='pull-right dropdown'>
+    <a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+      <li><a href="#">Действие 1</a></li>
+      <li><a href="#">Действие 2</a></li>
+      <li><a href="{% url 'mails:mail_statistics' %}">Mail Statistics</a></li>
+      <li role="separator" class="divider"></li>
+      <li><a href="{% url 'mails:last_10_msgs' auto_update=0 %}">Last 10 Messages</a></li>
+    </ul>
+    </li>
+
+
+profile.html
+
+    <form method='POST' action='{% url "chats:chat_create" %}' enctype='multipart/form-data'>{% csrf_token %}
+        <input type='hidden' name='slug' value='{{ profile.slug }}' />
+        <input type='submit' class='btn btn-default' value='Send Message (Start Chat)' />
+    </form>
+
+
+
+create_msg_form.html
+
+{% extends base_template  %}
+
+
+<form method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
+{{ m_form|crispy }}
+<input type='submit' class='btn btn-default' value='Send Message' id='submit' data-to-url="{% url 'chats:message_create' slug=chat_instance %}"/>
+</form>
+
+
+
+<form method='POST' id="msg-form" action='' enctype='multipart/form-data' data-to-url="{{ chat_instance.create_msg }}">{% csrf_token %}
+    {{ m_form|crispy }}
+    <button type='submit' class='btn btn-default' value='Send Message' />
+    </form>
+
+
+
+
+
+
+
+<form method="POST" id="post-form">
+    {% csrf_token %}
+    <div class="form-group">
+      <label>Title</label>
+      <input type="text" class="form-control" id="title" placeholder="Title">
+    </div>
+     <div class="form-group">
+       <label>Description</label>
+       <textarea class="form-control" id="description" placeholder="Description"></textarea>
+     </div>
+     <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+
+
+// send msg to chat
+$(document).on('submit', '#post-form',function(e){
+    var ajaxdata =  {
+        title: $('#title').val(),
+        description: $('#description').val(),
+        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+        action: 'post'
+    };
+    $.ajax({
+        type:'POST',
+        url: `{% url 'chats:message_create' slug=chat_instance %}`,
+        data: JSON.stringify(ajaxdata),
+        success:function(json){
+            document.getElementById("post-form").reset();
+            $(".posts").prepend('<div class="col-md-6">'+
+                '<div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">' +
+                    '<div class="col p-4 d-flex flex-column position-static">' +
+                        '<h3 class="mb-0">' + json.title + '</h3>' +
+                        '<p class="mb-auto">' + json.description + '</p>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' 
+            )
+        },
+        error : function(xhr,errmsg,err) {
+        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    }
+    });
+});
+
+
+
+<!-- <p><a data-to-url="{% url 'chats:create_msg' %}" data-mailthread-id="{{instance.thread.id}}" data-operation='pop' onclick="mail_answer(this)" class="btn btn-primary answer" role="button">Send Message</a></p>
+</article> -->
+
+<!-- <article class='mail_answer_append'></article> -->
+
+<!-- </p> -->
+
+<!-- <script src='{% static "js/chat_operations.js" %}'></script> -->

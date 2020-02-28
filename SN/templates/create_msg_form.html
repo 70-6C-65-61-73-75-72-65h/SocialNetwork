@@ -1,0 +1,23 @@
+{% load crispy_forms_tags %}
+{% block head_extra %} 
+{{ m_form.media }}
+{% endblock head_extra %}
+{% block create_msg %}
+
+<div class="container">
+    <div class="row">
+    <h1>Message</h1>
+    <hr/>
+        <div class="col-sm-12 col-sm-offset-2"> 
+             
+            <form method="POST" id="create_msg_form" action="" enctype="multipart/form-data">
+                {{ m_form|crispy }}
+            </form>
+            <button type="button" data-to-url="{{ chat_instance.create_msg }}" onclick="send_msg(this)" class="btn btn-primary" role="button">Send Message</button>
+
+        </div>
+    </div>
+</div>
+<div id="error-msg"></div>
+{% endblock create_msg %}
+

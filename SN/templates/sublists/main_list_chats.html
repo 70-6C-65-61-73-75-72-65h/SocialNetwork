@@ -1,0 +1,20 @@
+{% for chat in chat_list %}
+<div class="row">
+<!-- <div class="col-lg-6 col-sm-6"> -->
+    <!-- TODO! add profile image -->
+    <div class="thumbnail">
+    <div class="caption chat-detail-item">
+        <h3><a href='{{ chat.get_absolute_url }}'>{{ chat.chat_name }}</a> <small>chat_image</small></h3>
+        <h4>last message: <i>{{ chat.last_created_msg.content|truncatechars_html:120 }}{% if chat.last_created_msg.image %}... image in message ... {% endif %}</i></h4>
+        <h4>msg sender: <i>{{ chat.last_created_msg.sender.user.username }}</i></h4>
+        <h4>new messages in chat: <i>{{ chat.count_new_messages }}</i></h4>
+        {% if request.user.is_authenticated %}
+        <!-- TODO rebuild -->
+            <p><a data-slug="{{ chat.slug }}" data-to-url="{{ chat.get_delete_url }}" id="chat_operations" onclick="delete_chat(this)" class="btn btn-danger" role="button">DELETE</a></p>
+        {% endif %}
+    </div>
+    </div>
+<!-- </div> -->
+</div>
+<!-- <hr/> -->
+{% endfor %}

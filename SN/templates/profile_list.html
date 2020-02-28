@@ -1,0 +1,68 @@
+{% extends base_template %}
+
+{% block content %}
+
+
+<div class='container'>
+<div class='row'>
+<section class='col-sm-2 col-sm-offset-5'>
+    <h1>List</h1>
+</section>
+</div>
+<hr>
+<div class='row'>
+
+<!-- inner list -->
+<section class='container col-lg-10 col-lg-offset-3 col-sm-10 col-sm-offset-3 search'>
+<form method='GET' action='' class='row'>
+<div class='col-lg-6 col-sm-6'>
+    <div class='input-group'>
+        <input class='form-control' type='text' name='q' placeholder='Search profiles' value='{{ request.GET.q }}'/>
+        <span class='input-group-btn'>
+            <button class='btn btn-default' type='submit'>Search <i class="fa fa-search"></i></button>
+        </span>
+    </div>
+</div>
+</form>
+</section>
+
+
+
+<section class='container profile-list'>
+{% for profile in profile_list %}
+<div class="row">
+    <div class="thumbnail">
+    <div class="caption profile-detail-item">
+        <h3><a href='{{ profile.get_absolute_url }}'>{{ profile.user.username }}</a> <small>profile_image</small></h3>
+    </div>
+    </div>
+</div>
+{% endfor %}
+</section>
+
+<footer class='footer'>
+{% if is_paginated %}
+    <div class="container pagination">
+        <span class="step-links col-lg-3 col-lg-offset-4 col-sm-3 col-sm-offset-4">
+            {% if profile_list.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ profile_list.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ profile_list.number }} of {{ profile_list.paginator.num_pages }}.
+            </span>
+    
+            {% if profile_list.has_next %}
+                <a href="?page={{ profile_list.next_page_number }}">next</a>
+                <a href="?page={{ profile_list.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endif %}
+</footer>
+
+</div>
+</div>
+<!-- <div id='main_list_msgs'></div> -->
+{% endblock content %}

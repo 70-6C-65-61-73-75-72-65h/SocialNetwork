@@ -1,0 +1,14 @@
+.no-marginLR {
+    margin-left:0;
+    margin-right:0;
+}
+
+.no-padding {
+    padding: 0px;
+}
+
+.row-margin {
+    margin-bottom: 10px;
+    padding-left: 10px;
+    border-radius: 10px 40px 10px 40px;
+}

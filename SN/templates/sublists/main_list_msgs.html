@@ -1,0 +1,89 @@
+{% load pool_extras %}
+<section class='container col-lg-10 col-lg-offset-3 col-sm-10 col-sm-offset-3 search'>
+<form method='GET' action='' class='row'>
+<div class='col-lg-6 col-sm-6'>
+    <div class='input-group'>
+        <input class='form-control' type='text' name='q' placeholder='Search mails' value='{{ request.GET.q }}'/>
+        <span class='input-group-btn'>
+            <!-- <input class='btn btn-default' type='submit' value='Search' /> -->
+            <button class='btn btn-default' type='submit'>Search <i class="fa fa-search"></i></button>
+        </span>
+    </div>
+</div>
+</form>
+</section>
+
+<section class='container mail-list'>
+{% for obj in object_list %}
+<div class="{% if forloop.counter|divisibleby:2 %}row{% endif %}">
+<div class="col-lg-6 col-sm-6">
+    <div class="thumbnail">
+        {% if obj.image %}
+        <img src='{{ obj.image.url }}' class='img-responsive' />
+        {% endif %}
+    <div class="caption mail-detail-item">
+        <h3><a href='{{ obj.get_absolute_url }}'>{{ obj.topic }}</a> <small>{{ obj.created }}</small></h3>
+        <p><a href="{{ obj.sender.get_absolute_url }}">Author: {{ obj.sender.user.username }}</a></p>
+        <section class='receivers'>
+            Has been send for: 
+            {% for receiver in obj.receivers.all|iterate_queryset %}
+            <a href="{{ receiver.get_absolute_url }}">{{ receiver.user.username }}</a>{% if forloop.counter == obj.receivers.all|length %}.{% else %},{% endif %}
+            {% endfor %}
+        </section>
+        {{ obj.get_markdown|truncatechars_html:120 }}
+        {% if request.user.is_authenticated %}
+            {% if request.user == obj.sender.user %}
+                <p><a data-slug="{{ obj.slug }}" data-to-url="{{ obj.get_delete_url }}" id="chat_operations" onclick="delete_mail(this)" class="btn btn-danger" role="button">DELETE</a></p>
+            {% endif %}
+        {% endif %}
+    </div>
+    </div>
+</div>
+</div>
+<!-- <hr/> -->
+{% endfor %}
+</section>
+
+<footer class='footer'>
+{% if is_paginated %}
+    <div class="container pagination">
+        <span class="step-links col-lg-3 col-lg-offset-4 col-sm-3 col-sm-offset-4">
+            {% if object_list.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ object_list.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+            </span>
+    
+            {% if object_list.has_next %}
+                <a href="?page={{ object_list.next_page_number }}">next</a>
+                <a href="?page={{ object_list.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    <!-- <span class="step-links text-muted">
+        {% if object_list.has_previous %}
+            <a href="?{{ page_request_var }}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+        </span>
+
+        {% if object_list.has_next %}
+            <a href="?{{ page_request_var }}={{ object_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next</a>
+        {% endif %}
+    </span> -->
+
+
+    <!-- {% for l in object_list.paginator.page_range %}
+    {% if forloop.counter < 3 %}
+        <li><a href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+    {% endif %}
+    {% endfor %} -->
+
+
+    </div>
+{% endif %}
+</footer>

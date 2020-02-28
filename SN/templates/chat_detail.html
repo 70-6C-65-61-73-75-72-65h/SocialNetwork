@@ -1,0 +1,29 @@
+{% extends base_template %}
+{% load static %}
+{% block head_title %}
+    {{theme}}
+{% endblock head_title %}
+
+
+{% block chat_detail_link %}
+  <li><a href='{{ chat_instance.get_absolute_url }}'>{{ chat_instance.chat_name }}</a></li>
+{% endblock chat_detail_link %}
+{% block content %}
+<h1>CHAT {{ chat_instance.chat_name }}</h1>
+<hr width='10%' style="height:5px;border:none;">
+
+<section class='container-fluid-sm|md|lg|xl msgs_in_chat'>
+{% include 'to_render_msgs.html' %}
+</section>
+
+<article class='create_msg'>
+    <p><a data-to-url="{{ chat_instance.create_msg }}" onclick="create_msg(this)" class="btn btn-primary" role="button">Create Message</a></p>
+</article>
+
+<div id='update_msgs_url' data-url='{% url "chats:update_msgs" slug=chat_instance.slug %}'></div>
+
+<script src="http://code.jquery.com/jquery-1.12.2.min.js"   integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk="   crossorigin="anonymous"></script>
+<script src='{% static "js/update_msgs.js" %}'></script>
+{% endblock content %}
+
+

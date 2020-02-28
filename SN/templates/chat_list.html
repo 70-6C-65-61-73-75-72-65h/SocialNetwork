@@ -1,0 +1,74 @@
+{% extends base_template %}
+{% load static %}
+{% block content %}
+
+
+<div class='container'>
+<div class='row'>
+<article class='create_custom_chat'>
+    <p><a data-to-url='{% url "chats:chat_create" %}' onclick="create_custom_chat(this)" class="btn btn-default" role="button">Create Custom Chat</a></p>
+</article>
+</div>
+
+<hr>
+<div class='row'>
+<section class='col-sm-2 col-sm-offset-5'>
+    <h1>List</h1>
+</section>
+</div>
+<hr>
+
+<section class='container col-lg-10 col-lg-offset-3 col-sm-10 col-sm-offset-3 search'>
+<form method='GET' action='' class='row'>
+<div class='col-lg-6 col-sm-6'>
+    <div class='input-group'>
+        <input class='form-control' type='text' name='q' placeholder='Search chats' value='{{ request.GET.q }}'/>
+        <span class='input-group-btn'>
+            <!-- <input class='btn btn-default' type='submit' value='Search' /> -->
+            <button class='btn btn-default' type='submit'>Search <i class="fa fa-search"></i></button>
+        </span>
+    </div>
+</div>
+</form>
+</section>
+
+        
+<section class='container page-center main_list_chats'>
+{% include 'sublists/main_list_chats.html' %}
+</section>
+
+<footer class='footer'>
+{% if is_paginated %}
+    <div class="container pagination">
+        <span class="step-links col-lg-3 col-lg-offset-4 col-sm-3 col-sm-offset-4">
+            {% if chat_list.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ chat_list.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ chat_list.number }} of {{ chat_list.paginator.num_pages }}.
+            </span>
+    
+            {% if chat_list.has_next %}
+                <a href="?page={{ chat_list.next_page_number }}">next</a>
+                <a href="?page={{ chat_list.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endif %}
+</footer>
+
+
+{% if request.GET.q != None or request.GET.page != None %}
+<div id='manage_timeouts' data-to-manage='Off'></div>
+{% else %}
+<div id='manage_timeouts' data-to-manage='On'></div>
+{% endif %}
+
+<div id='update_chats_url' data-url='{% url "chats:update_chats" %}'></div>
+
+<script src="http://code.jquery.com/jquery-1.12.2.min.js"   integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk="   crossorigin="anonymous"></script>
+<script src='{% static "js/update_chats.js" %}'></script>
+<!-- <div id='main_list_msgs'></div> -->
+{% endblock content %}

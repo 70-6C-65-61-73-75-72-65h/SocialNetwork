@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load pool_extras %}
+<h3><a href="{% url 'mails:create' %}">Send Mail</a></h3>
+<section class='col-sm-2 col-sm-offset-5'>
+    <h1>List</h1>
+</section>
+{% if type == "last_10_msgs" %}
+<section class='page-center container col-sm-8' id='last_10_msgs' data-to-url="{% url 'mails:last_10_msgs' auto_update=1 %}">
+    {% load static %}
+    <img src="{% static '/pics/loading2.gif' %}" alt="animated" class="img-responsive" />
+</section>
+{% elif type == "main_list_msgs" %}
+<section class='page-center'>
+{% include 'sublists/main_list_msgs.html' %}
+</section>
+<!-- <div id='main_list_msgs'></div> -->
+{% endif %}
+{% endblock content %}

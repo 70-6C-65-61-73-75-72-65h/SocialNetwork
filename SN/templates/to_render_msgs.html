@@ -1,0 +1,24 @@
+{% for msg in chat_instance.get_inner_msgs %}
+    <div class='row bg-primary text-white row-margin msg_id_{{msg.id}}'>
+        <div class='col-sm-12'> 
+            content: {{msg.content}}
+        </div>
+        <div class='col-sm-3'>
+            sender: {{msg.sender.user.username}}
+        </div>
+        <div class='col-sm-3'>
+            created: {{msg.created}}
+        </div>
+        {% if msg.is_msg_updated %}
+            <div class='col-sm-3'>
+                updated: {{msg.updated}}
+            </div>
+        {% endif %}
+        {% if msg.image %}
+            <div class='col-sm-3'>
+                image: {{msg.image.url}}
+            </div>
+        {% endif %}
+    </div>
+    <!-- <hr width='10%'  style="height:0px;border:none;"> -->
+{% endfor %}

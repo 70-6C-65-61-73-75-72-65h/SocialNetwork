@@ -1,0 +1,19 @@
+C:\Users\maxul\Envs\chat\Lib\site-packages\pagedown\static\pagedown\demo\browser
+env->site-packages->pagedown ->static->pagedown-> demo-> browser-> demo.css ( .wmd-panel (margin-left = 25%))
+
+
+
+
+    # queryset = Chat.objects.filter(reduce(lambda x, y: x | y, [Q(brand=item) for item in brands])) -> Q(brand=brands[0]) | Q(brand=brands[1]) | Q(brand=brands[2]) | .....
+
+
+Synchronous XMLHttpRequest on the main thread is deprecated because of its detrimental effects to the end user's experience. For more help, check https://xhr.spec.whatwg.org/.
+
+[Violation] 'readystatechange' handler took 204ms
+
+
+
+.select_related want work with vals that was added with FK to the instance ( like self.likes.all())
+
+https://medium.com/better-programming/django-select-related-and-prefetch-related-f23043fd635d
+https://stackoverflow.com/questions/23121850/select-related-with-reverse-foreign-keys
